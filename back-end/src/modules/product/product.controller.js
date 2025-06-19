@@ -51,7 +51,7 @@ export const getProducts = async (req, res) => {
       ProductModel,
       {}, 
       req,
-      'name mainImage price discount'
+      'name mainImage price discount createdBy'
     );
   
     return res.status(200).json({
@@ -79,11 +79,11 @@ export const updateProduct = async (req, res) => {
     if (req.role !== 'admin' && String(product.createdBy) !== String(req.id)) {
         return res.status(403).json({ message: 'Not authorized' });
     }
-
+    const discount = Number(req.body.discount ?? 0);
     product.name = req.body.name ?? product.name;
     product.description = req.body.description ?? product.description;
     product.price = req.body.price ?? product.price;
-    product.discount = req.body.discount ?? 0;
+    product.discount = discount;
     product.priceAfterDiscount = product.price - (product.price * (product.discount / 100));
     product.updatedBy = req.id;
 

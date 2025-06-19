@@ -1,43 +1,45 @@
 import { createContext, useState, useEffect, type ReactNode } from "react";
-import type { UserPayload } from "../types";
+import type { AuthContextType, DecodedToken, UserPayload } from "../types";
 import { jwtDecode } from "jwt-decode";
-
-interface AuthContextType {
-  user: UserPayload | null;
-  login: (token: string) => void;
-  logout: () => void;
-}
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
   login: () => {},
   logout: () => {},
+  loading: true
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserPayload | null>(null);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const decodedUser: any = jwtDecode(token);
-      setUser({
-        id: decodedUser.id,
-        userName: decodedUser.userName,
-        role: decodedUser.role,
-      });
+      try {
+        const decoded = jwtDecode<DecodedToken>(token);
+        setUser({
+          id: decoded.id,
+          userName: decoded.userName,
+          role: decoded.role,
+        });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (err) {
+        console.error("Invalid token, logout automatically");
+        localStorage.removeItem("token");
+        setUser(null);
+      }
     }
+    setLoading(false); 
   }, []);
 
   const login = (token: string) => {
     localStorage.setItem("token", token);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const decodedUser: any = jwtDecode(token);
+    const decoded: DecodedToken = jwtDecode(token);
     setUser({
-      id: decodedUser.id,
-      userName: decodedUser.userName,
-      role: decodedUser.role,
+      id: decoded.id,
+      userName: decoded.userName,
+      role: decoded.role,
     });
   };
 
@@ -47,8 +49,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
+      {loading ? <div>Loading...</div> : children}
     </AuthContext.Provider>
   );
 };

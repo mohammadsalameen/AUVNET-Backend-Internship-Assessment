@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { login } from "../services/authService";
 import { AuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const { login: loginContext } = useContext(AuthContext);
@@ -8,6 +9,7 @@ const LoginForm = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,6 +20,7 @@ const LoginForm = () => {
     try {
       const res = await login(formData);
       loginContext(res.token); 
+      navigate("/dashboard");
       alert("Logged in successfully");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -44,7 +47,7 @@ const LoginForm = () => {
         onChange={handleChange}
         className="border p-2 w-full"
       />
-      <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded cursor-pointer">
+      <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded cursor-pointer hover:bg-green-600">
         Login
       </button>
     </form>

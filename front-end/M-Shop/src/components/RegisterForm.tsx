@@ -51,7 +51,7 @@ const RegisterForm = () => {
         onChange={handleChange}
         className="border p-2 w-full"
       />
-      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded cursor-pointer">
+      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded cursor-pointer hover:bg-blue-600">
         Register
       </button>
     </form>
