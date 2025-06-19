@@ -14,7 +14,7 @@ router.post('/create', auth(['admin', 'user']), fileUpload(fileValidation.image)
     {name : 'subImages', maxCount : 4}
 ]),validation(productSchema), asyncHandler(productController.create));
 
-router.get('/', auth(['admin']), asyncHandler(productController.getProducts));
+router.get('/', auth(['admin', 'user']), asyncHandler(productController.getProducts));
 router.get('/:id', auth(['admin']), asyncHandler(productController.getProductDetails));
 
 router.put('/update-product/:id', auth(['admin', 'user']), fileUpload(fileValidation.image).fields([

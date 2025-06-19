@@ -16,9 +16,11 @@ import AddProductPage from "./pages/AddProductsPage";
 import { useContext } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 import EditProductPage from "./pages/EditProductPage";
+import CategoriesPage from "./components/CategoryList";
+import WishlistPage from "./pages/WishListPage";
 
 function AppContent() {
-  const { user } = useContext(AuthContext);
+  useContext(AuthContext);
   const location = useLocation();
 
   const hideNavbar =
@@ -58,7 +60,7 @@ function AppContent() {
         <Route
           path="/products/add"
           element={
-            <ProtectedRoute allowedRoles={["admin"]}>
+            <ProtectedRoute>
               <AddProductPage />
             </ProtectedRoute>
           }
@@ -68,6 +70,22 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <EditProductPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/categories"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <CategoriesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute allowedRoles={["user"]}>
+              <WishlistPage />
             </ProtectedRoute>
           }
         />

@@ -22,6 +22,7 @@ const Navbar = () => {
       {user ? (
         <div className="flex items-center space-x-4">
           <Link to="/dashboard" className="hover:text-blue-300">Dashboard</Link>
+          <Link to="/wishlist">Wishlist</Link>
           <Link to="/products" className="hover:text-blue-300">Products</Link>
           {user.role === "admin" && (
             <Link to="/categories" className="hover:text-blue-300">Categories</Link>

@@ -12,6 +12,7 @@ import { createDefaultAdmin } from './src/seeder/adminSeeder.js';
 const initApp = async(app, express) =>{
     app.use(express.json());
     app.use(cors());
+    app.use(express.urlencoded({extended : true}));
     connectDB();
     await createDefaultAdmin();
     

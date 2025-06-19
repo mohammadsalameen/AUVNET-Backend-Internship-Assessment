@@ -47,19 +47,43 @@ export const create = async (req, res) =>{
 }
 
 export const getProducts = async (req, res) => {
-    const result = await paginateQuery(
-      ProductModel,
-      {}, 
-      req,
-      'name mainImage price discount createdBy'
-    );
-  
-    return res.status(200).json({
-      message: "success",
-      products: result.data,
-      pagination: result.pagination
-    });
-  };
+    try {
+
+        const filter = {}; 
+
+        const result = await paginateQuery(
+            ProductModel,
+            filter,
+            req,
+            'name mainImage price discount createdBy categoryId'
+        );
+
+        const products = await ProductModel.populate(result.data, [
+            {
+                path: 'createdBy',
+                select: 'username email'
+            },
+            {
+                path: 'categoryId',
+                select: 'name'
+            }
+        ]);
+
+        return res.status(200).json({
+            message: "success",
+            products,
+            pagination: result.pagination,
+            userRole: req.role 
+        });
+    } catch (err) {
+        console.error("Error fetching products:", err);
+        return res.status(500).json({ 
+            message: "Failed to fetch products",
+            error: err.message 
+        });
+    }
+};
+
 
 export const getProductDetails = async (req, res) =>{
     const {id} = req.params;

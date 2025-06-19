@@ -7,7 +7,7 @@ import { addToWishlistSchema } from './wishlist.validation.js';
 
 const router = Router();
 
-router.post('/add', auth(['user']),validation(addToWishlistSchema), asyncHandler(wishlistController.addToWishlist));
+router.post('/add', auth(['user']), validation(addToWishlistSchema), asyncHandler(wishlistController.addToWishlist));
 router.get('/', auth(['user']), asyncHandler(wishlistController.getWishlist));
 router.delete('/remove/:productId', auth(['user']), asyncHandler(wishlistController.removeFromWishlist));
 

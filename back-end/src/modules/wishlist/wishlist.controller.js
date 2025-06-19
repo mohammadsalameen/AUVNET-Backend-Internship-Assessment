@@ -2,7 +2,6 @@ import { createWishlist, findWishlistByUser, updateWishlist } from "../../reposi
 
 export const addToWishlist = async (req, res) => {
   const { productId } = req.body;
-  
   const wishlist = await findWishlistByUser(req.id);
 
   if (!wishlist) {
